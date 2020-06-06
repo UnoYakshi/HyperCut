@@ -4,13 +4,29 @@
 
 
 {% block content %}
+    <script>
+    function copyToClipboard(id) {
+        var text = document.getElementById(id).innerText;
+        var elem = document.createElement("textarea");
+        document.body.appendChild(elem);
+        elem.value = text;
+        elem.select();
+        document.execCommand("copy");
+        document.body.removeChild(elem);
+    }
+    </script>
 
-{# URLPair model's form... #}
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
+    {# URLPair model's form... #}
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Cut!">
+    </form>
 
-    {# Submit and Copy-to-Clipboard Button... #}
-    <input type="submit" value="Cut!">
-</form>
+    {# When the new instance is created, also display the generated short URL... #}
+    {% if object.short_url %}
+        {# The resulting short URL hash... #}
+        Click on the URL to Copy it:
+        <p id="short_url_id" title="Click to Copy!" onclick="copyToClipboard(this.id)">{{ object.short_url }}</p>
+    {% endif %}
 
 {% endblock %}
