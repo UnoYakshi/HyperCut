@@ -1,7 +1,9 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.views import generic
+
+from .models import UrlPair
 
 
-# Create your views here.
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+class IndexView(generic.CreateView):
+    model = UrlPair
+    template_name = 'urlcut/index.html'
+    fields = ['full_url', 'usage_count_limit']

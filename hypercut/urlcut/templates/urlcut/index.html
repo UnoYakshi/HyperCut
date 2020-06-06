@@ -1,0 +1,16 @@
+{% extends 'urlcut/base.html' %}
+
+{# TODO: Add All Links href... #}
+
+
+{% block content %}
+
+{# URLPair model's form... #}
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+
+    {# Submit and Copy-to-Clipboard Button... #}
+    <input type="submit" value="Cut!">
+</form>
+
+{% endblock %}

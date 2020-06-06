@@ -1,4 +1,5 @@
 from django.db import models
+import short_url
 
 
 class UrlPair(models.Model):
@@ -10,3 +11,8 @@ class UrlPair(models.Model):
     usage_count_limit = models.IntegerField(default=-1, null=True)
 
     created = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        # Shorten the given full URL...
+        self.short_url = short_url.encode_url(self.full_url)
+        super(UrlPair, self).save(*args, **kwargs)
