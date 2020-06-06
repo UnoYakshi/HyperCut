@@ -14,6 +14,9 @@ class UrlPair(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
 
+    def update_usage_count(self):
+        self.usage_count += 1
+
     def save(self, *args, **kwargs):
         """Re-overwrite: fill in short URL using the provided full URL..."""
         self.short_url = encode(self.full_url)
