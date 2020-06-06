@@ -1,11 +1,16 @@
 {% extends 'urlcut/base.html' %}
 
+{% block title %}Info on {{ object.short_url }}{% endblock %}
+
+
 {% block content %}
     {# URLPair model's form... #}
     <ul>
+        <li>ID:{{ object.id }}</li>
         <li>Full URL:{{ object.full_url }}</li>
         <li>Short URL: {{ object.short_url }}</li>
         <li>Usage count: {{ object.usage_count }}</li>
-        <li>Creation date: {{ object.created | date }}</li>
+        <li>Creation date: {{ object.created|date }}</li>
+        <li>Creation time: {{ object.created|time }}</li>
     </ul>
 {% endblock %}

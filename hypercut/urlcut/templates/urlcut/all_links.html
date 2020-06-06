@@ -1,0 +1,48 @@
+{% extends 'urlcut/base.html' %}
+
+{% block title %}All List{% endblock %}
+
+{% block content %}
+
+    {# Display all the links in this pagination chunk... #}
+    <ul style="list-style-type:none;">
+    {% for url_pair in object_list %}
+        <li title="{{url_pair.full_url}}">
+            {# Metadata... #}
+            [used {{ url_pair.usage_count }}, id {{ url_pair.id }}, hash {{ url_pair.short_url }}]
+            {{ url_pair.full_url|truncatechars:"60" }}
+
+            {# Details link-button... #}
+            <form method="get" action="{% url 'detail' url_pair.id %}">
+                <input type="submit" value="Details">
+            </form>
+
+            {# Remove link-button... #}
+            <form method="post" action="{% url 'remove' url_pair.id %}">
+                <input type="submit" value="Remove">
+            </form>
+        </li>
+        <br>
+    {% endfor %}
+    </ul>
+
+    {# Django-based pagination... #}
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">prev</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
+{% endblock %}

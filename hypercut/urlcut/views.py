@@ -1,5 +1,5 @@
 from django.views import generic
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 
 from .models import UrlPair
 from .hash import decode
@@ -17,9 +17,18 @@ class IndexView(generic.CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class ShortURLRedirectView(generic.RedirectView):
-    pattern_name = 'url-redirect'
+class URLView(generic.DetailView):
+    model = UrlPair
+    template_name = 'urlcut/detail.html'
 
+
+class RemoveURLView(generic.DeleteView):
+    model = UrlPair
+    template_name = 'urlcut/delete.html'
+    success_url = '/all-list'
+
+
+class ShortURLRedirectView(generic.RedirectView):
     def get_redirect_url(*args, **kwargs):
         # Get the correct URL pair...
         short_url = kwargs.get('short_url')
@@ -35,6 +44,10 @@ class ShortURLRedirectView(generic.RedirectView):
         return url_pair.full_url
 
 
-class URLView(generic.DetailView):
+class AllURLsView(generic.ListView):
     model = UrlPair
-    template_name = 'urlcut/detail.html'
+    template_name = 'urlcut/all_links.html'
+    context_object_name = 'url_pair_list'
+    queryset = UrlPair.objects.all()
+    ordering = ['-usage_count']
+    paginate_by = 6
