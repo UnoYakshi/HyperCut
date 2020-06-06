@@ -2,6 +2,7 @@ from django.views import generic
 from django.shortcuts import get_object_or_404
 
 from .models import UrlPair
+from .hash import decode
 
 
 class IndexView(generic.CreateView):
@@ -21,7 +22,9 @@ class ShortURLRedirectView(generic.RedirectView):
 
     def get_redirect_url(*args, **kwargs):
         # Get the correct URL pair...
-        url_pair = get_object_or_404(UrlPair, short_url=kwargs.get('short_url'))
+        short_url = kwargs.get('short_url')
+        pair_id = decode(short_url)
+        url_pair = get_object_or_404(UrlPair, pk=pair_id)
 
         # Check if usage count limit is not exceeded...
         if (url_pair.usage_count_limit > 0

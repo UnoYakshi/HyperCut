@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 django = "*"
-short-url = "*"
+hashids = "*"
 
 [requires]
 python_version = "3.7"

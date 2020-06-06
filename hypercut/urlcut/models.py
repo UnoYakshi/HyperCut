@@ -20,7 +20,9 @@ class UrlPair(models.Model):
 
     def save(self, *args, **kwargs):
         """Re-overwrite: fill in short URL using the provided full URL..."""
-        self.short_url = encode(self.full_url)
+        super(UrlPair, self).save(*args, **kwargs)
+        hashed = encode(self.id)
+        self.short_url = hashed
         super(UrlPair, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
