@@ -20,8 +20,14 @@ class ShortURLRedirectView(generic.RedirectView):
     pattern_name = 'url-redirect'
 
     def get_redirect_url(*args, **kwargs):
-        short_url = kwargs.get('short_url')
-        url_pair = get_object_or_404(UrlPair, short_url=short_url)
+        # Get the correct URL pair...
+        url_pair = get_object_or_404(UrlPair, short_url=kwargs.get('short_url'))
+
+        # Check if usage count limit is not exceeded...
+        if (url_pair.usage_count_limit > 0
+                and not url_pair.usage_count < url_pair.usage_count_limit):
+            return None
+
         url_pair.update_usage_count()
         return url_pair.full_url
 
