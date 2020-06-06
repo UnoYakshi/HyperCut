@@ -26,7 +26,9 @@
     {% if object.short_url %}
         {# The resulting short URL hash... #}
         Click on the URL to Copy it:
-        <p id="short_url_id" title="Click to Copy!" onclick="copyToClipboard(this.id)">{{ object.short_url }}</p>
+        <p id="short_url_id" title="Click to Copy!" onclick="copyToClipboard(this.id)">
+            {{ request.get_host }}{{ request.path }}{{ object.short_url }}
+        </p>
     {% endif %}
 
 {% endblock %}
