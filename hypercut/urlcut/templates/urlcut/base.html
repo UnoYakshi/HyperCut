@@ -28,7 +28,12 @@
 
     <body>
         <header>
-            {% block header %}{% endblock header %}
+            {% block header %}
+                <ul>
+                    <li><a href="/">Index</a></li>
+                    <li><a href="/all-list">All</a></li>
+                </ul>
+            {% endblock header %}
         </header>
 
         <div class="content">
