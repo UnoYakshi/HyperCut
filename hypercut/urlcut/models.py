@@ -16,6 +16,7 @@ class UrlPair(models.Model):
 
     def update_usage_count(self):
         self.usage_count += 1
+        self.save()
 
     def save(self, *args, **kwargs):
         """Re-overwrite: fill in short URL using the provided full URL..."""
