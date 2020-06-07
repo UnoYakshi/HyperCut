@@ -5,6 +5,7 @@
 {% load bootstrap_tags %}
 
 {% block content %}
+    {# Copy to clipboard if page is provided with `object.short_url`... #}
     <script>
         function copyToClipboard(id) {
             var text = document.getElementById(id).innerText;
@@ -18,12 +19,16 @@
     </script>
 
     {# URLPair model's form... #}
-    <form method="post" class="col-xs-8" novalidate>
+    <form method="post" class="col-md-8" novalidate>
         {% csrf_token %}
         {{ form|as_bootstrap_inline }}
         <div class="form-group">
-            <div class="col-xs-2"></div>
-            <button type="submit" class="btn btn-primary btn-lg col-xs-8">Cut!</button>
+            <div class="row">
+                <div class="col-md-1 offset-md-1"></div>
+                <div class="col-md-8">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Cut!</button>
+                </div>
+            </div>
         </div>
     </form>
 
