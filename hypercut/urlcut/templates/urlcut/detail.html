@@ -3,14 +3,52 @@
 {% block title %}Info on {{ object.short_url }}{% endblock %}
 
 
+
+
 {% block content %}
     {# URLPair model's form... #}
-    <ul>
-        <li>ID:{{ object.id }}</li>
-        <li>Full URL:{{ object.full_url }}</li>
-        <li>Short URL: {{ object.short_url }}</li>
-        <li>Usage count: {{ object.usage_count }}</li>
-        <li>Creation date: {{ object.created|date }}</li>
-        <li>Creation time: {{ object.created|time }}</li>
-    </ul>
+    <div class="row">
+        <div class="col-m-8">
+            <table class="table">
+                <tbody>
+
+                {# ID... #}
+                <tr>
+                    <th style="width: 40%" scope="row">ID</th>
+                    <td>{{ object.id }}</td>
+                </tr>
+
+                {# Full URL... #}
+                <tr>
+                    <th scope="row">Full URL</th>
+                    <td><a href="{{ object.full_url }}">{{ object.full_url }}</a></td>
+                </tr>
+
+                {# Short URL... #}
+                <tr>
+                    <th scope="row">Short URL</th>
+                    <td>
+                        <a href="{{ request.get_host }}/{{ object.short_url }}">{{ request.get_host }}/{{ object.short_url }}</a>
+                    </td>
+                </tr>
+
+                {# Usage Count / Usage Count Limit... #}
+                <tr>
+                    <th scope="row" class="right">Usage Count / Limit</th>
+                    <td>
+                        {{ object.usage_count }} /
+                        {# Either display the actual limit or infinity symbol... #}
+                        {% if object.usage_count_limit < 0 %}∞{% else %}{{ object.usage_count_limit }}{% endif %}
+                    </td>
+                </tr>
+
+                {# Creation datetime... #}
+                <tr>
+                    <th scope="row">Created</th>
+                    <td>{{ object.created|time }}, {{ object.created|date }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}
