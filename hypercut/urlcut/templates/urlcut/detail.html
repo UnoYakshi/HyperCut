@@ -49,6 +49,14 @@
                 </tr>
                 </tbody>
             </table>
+
+            <form method="post" action="{% url 'remove' object.id %}">
+                <button type="submit" class="btn btn-danger btn-lg float-right col-md-4" title="Delete URL with hash '{{ object.short_url }}'">
+                    <span class="fa fa-remove"></span>
+                    <span class="sr-only">remove</span>
+                </button>
+            </form>
+
         </div>
     </div>
 {% endblock %}
