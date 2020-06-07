@@ -108,10 +108,13 @@ class ViewsTC(TestCase):
 
 
 class AllTC(TestCase):
-    """Tests if """
+    """Tests displaying all the URLs in `/all-list/` """
     def setUp(self):
+        # Add a couple of pairs...
         self.first = UrlPair(full_url=FULL_URL_CORRECT, usage_count_limit=-1)
+        self.first.save()
         self.second = UrlPair(full_url=FULL_URL_CORRECT, usage_count_limit=-1)
+        self.second.save()
         self.factory = RequestFactory()
 
     def test_smoke(self):
