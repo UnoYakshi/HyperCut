@@ -131,8 +131,10 @@ class AllTC(TestCase):
         request.user = AnonymousUser()
 
         response = AllURLsView.as_view()(request)
-
         self.assertEqual(response.status_code, 200)
+
+        items_count = response.context_data['url_pair_list'].count()
+        self.assertEqual(items_count, 2)
 
 
 class HashTC(TestCase):
