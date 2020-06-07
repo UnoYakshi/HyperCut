@@ -1,48 +1,96 @@
 {% extends 'urlcut/base.html' %}
 
+{% block head_css_page %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+{% endblock head_css_page %}
+
 {% block title %}All List{% endblock %}
 
 {% block content %}
 
     {# Display all the links in this pagination chunk... #}
-    <ul style="list-style-type:none;">
-    {% for url_pair in object_list %}
-        <li title="{{url_pair.full_url}}">
-            {# Metadata... #}
-            [used {{ url_pair.usage_count }}, id {{ url_pair.id }}, hash {{ url_pair.short_url }}]
-            {{ url_pair.full_url|truncatechars:"60" }}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Usage / Limit</th>
+            <th>Hash</th>
+            <th>Full URL</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
 
-            {# Details link-button... #}
-            <form method="get" action="{% url 'detail' url_pair.id %}">
-                <input type="submit" value="Details">
-            </form>
+        <tbody>
+        {% for url_pair in object_list %}
+        <tr>
+            {# ID... #}
+            <td style="width: 5%">
+                <strong>{{ url_pair.id }}</strong>
+            </td>
 
-            {# Remove link-button... #}
-            <form method="post" action="{% url 'remove' url_pair.id %}">
-                <input type="submit" value="Remove">
-            </form>
-        </li>
-        <br>
-    {% endfor %}
-    </ul>
+            {# Usage count / limit (or infinity)... #}
+            <td style="width: 12%">
+                {{ url_pair.usage_count }} /
+                {% if url_pair.usage_count_limit < 0 %}∞{% else %}{{ url_pair.usage_count_limit }}{% endif %}
+            </td>
+
+            {# Short URL / Hash... #}
+            <td style="width: 12%" title="{{ request.get_host }}/{{ url_pair.short_url }}">
+                <a href="{{ request.get_host }}/{{ url_pair.short_url }}">{{ url_pair.short_url }}</a>
+            </td>
+
+            {# Full URL... #}
+            <td  title="{{ url_pair.full_url }}">
+                <a href="{{ url_pair.full_url }}">{{ url_pair.full_url|truncatechars:"60" }}</a>
+            </td>
+
+            {# Details button... #}
+            <td style="width: 2%">
+                <form method="get" action="{% url 'detail' url_pair.id %}">
+                    <button type="submit" class="btn btn-info">
+                        <span class="fa fa-info"></span>
+                        <span class="sr-only">info</span>
+                    </button>
+                </form>
+            </td>
+
+            {# Remove button... #}
+            <td style="width: 2%">
+                <form method="post" action="{% url 'remove' url_pair.id %}">
+                    <button type="submit" class="btn btn-danger">
+                        <span class="fa fa-remove"></span>
+                        <span class="sr-only">remove</span>
+                    </button>
+                </form>
+            </td>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
     {# Django-based pagination... #}
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">prev</a>
-            {% endif %}
+    <ul class="pagination pagination-circle justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">prev</a></li>
+        {% else %}
+            <li class="page-item disabled"><a class="page-link" href="?page=1">&laquo; first</a></li>
+            <li class="page-item disabled"><a class="page-link" href="?page=1">prev</a></li>
+        {% endif %}
 
-            <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-            </span>
+        <li class="page-item active">
+            <a class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</a>
+        </li>
 
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
-        </span>
-    </div>
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+        {% else %}
+            <li class="page-item disabled"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">&laquo; first</a></li>
+            <li class="page-item disabled"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">prev</a></li>
+        {% endif %}
+    </ul>
 
 {% endblock %}
