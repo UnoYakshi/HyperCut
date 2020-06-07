@@ -18,27 +18,34 @@
         }
     </script>
 
-    {# URLPair model's form... #}
-    <form method="post" class="col-md-8" novalidate>
-        {% csrf_token %}
-        {{ form|as_bootstrap_inline }}
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-1 offset-md-1"></div>
-                <div class="col-md-8">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Cut!</button>
+    <div class="row">
+        <form method="post" class="col-md-8" novalidate>
+            {% csrf_token %}
+
+            {# URLPair model's form... #}
+            {{ form|as_bootstrap_inline }}
+
+            {# Activate button... #}
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-1 offset-md-1"></div>
+                    <div class="col-md-8">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Cut!</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
 
-    {# When the new instance is created, also display the generated short URL... #}
-    {% if object.short_url %}
-        {# The resulting short URL hash... #}
-        Click on the URL to Copy it:
-        <p id="short_url_id" title="Click to Copy!" onclick="copyToClipboard(this.id)">
-            {{ request.get_host }}/{{ object.short_url }}
-        </p>
-    {% endif %}
+        {# When the new instance is created, also display the generated short URL... #}
+        {% if object.short_url %}
+            <div class="col">
+                <div class="card">
+                    {# The resulting short URL hash... #}
+                    <div class="card-body bg-warning" id="short_url_id" title="Click on the URL to Copy it"
+                         onclick="copyToClipboard(this.id)">{{ request.get_host }}/{{ object.short_url }}</div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 
 {% endblock %}
