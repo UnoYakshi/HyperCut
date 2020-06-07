@@ -2,24 +2,29 @@
 
 {# TODO: Add All Links href... #}
 
+{% load bootstrap_tags %}
 
 {% block content %}
     <script>
-    function copyToClipboard(id) {
-        var text = document.getElementById(id).innerText;
-        var elem = document.createElement("textarea");
-        document.body.appendChild(elem);
-        elem.value = text;
-        elem.select();
-        document.execCommand("copy");
-        document.body.removeChild(elem);
-    }
+        function copyToClipboard(id) {
+            var text = document.getElementById(id).innerText;
+            var elem = document.createElement("textarea");
+            document.body.appendChild(elem);
+            elem.value = text;
+            elem.select();
+            document.execCommand("copy");
+            document.body.removeChild(elem);
+        }
     </script>
 
     {# URLPair model's form... #}
-    <form method="post">{% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Cut!">
+    <form method="post" class="col-xs-8" novalidate>
+        {% csrf_token %}
+        {{ form|as_bootstrap_inline }}
+        <div class="form-group">
+            <div class="col-xs-2"></div>
+            <button type="submit" class="btn btn-primary btn-lg col-xs-8">Cut!</button>
+        </div>
     </form>
 
     {# When the new instance is created, also display the generated short URL... #}
@@ -27,7 +32,7 @@
         {# The resulting short URL hash... #}
         Click on the URL to Copy it:
         <p id="short_url_id" title="Click to Copy!" onclick="copyToClipboard(this.id)">
-            {{ request.get_host }}{{ request.path }}{{ object.short_url }}
+            {{ request.get_host }}/{{ object.short_url }}
         </p>
     {% endif %}
 

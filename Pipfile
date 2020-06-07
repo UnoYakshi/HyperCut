@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 django = "*"
 hashids = "*"
+django-forms-bootstrap = "*"
 
 [requires]
 python_version = "3.7"
